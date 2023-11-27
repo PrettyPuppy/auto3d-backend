@@ -10,7 +10,7 @@ const FormData = require('form-data');
 let timeoutId;
 
 const enhanceImage = catchAsync(async (req, res) => {
-    console.log('>>> Enhance Image', req.body);
+    console.log('>>> Enhance Image \n', req.body);
 
     let request = {
         method: 'post',
@@ -20,13 +20,14 @@ const enhanceImage = catchAsync(async (req, res) => {
             'Content-Type': 'application/json',
         },
         data: JSON.stringify({
-            frontUrl: req.body.frontUrl,
-            backUrl: req.body.backUrl,
+            front: config.url + ':' + config.port + '/' + req.files['frontImage'][0]['originalname'],
+            back: config.url + ':' + config.port + '/' + req.files['backImage'][0]['originalname'],
+            scale: 4,
         })
     };
 
     axios.request(request)
-        .then( async (response) => {
+        .then(async (response) => {
             console.log(response.data);
 
             const newProject = new Project({
@@ -108,7 +109,7 @@ const process = catchAsync(async (req, res) => {
     };
 
     axios.request(request)
-        .then( async (response) => {
+        .then(async (response) => {
             console.log(response.data);
             res.status(200).send(response.data);
         })
