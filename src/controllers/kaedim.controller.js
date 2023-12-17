@@ -12,8 +12,8 @@ let frontUrl, backUrl;
 const enhanceImage = catchAsync(async (req, res) => {
     console.log('>>> Enhance Image', req.params.user_id);
 
-    frontUrl = config.url + '/' + req.files['frontImage'][0]['originalname'];
-    backUrl = config.url + '/' + req.files['backImage'][0]['originalname']
+    frontUrl = config.url + '/images/' + req.files['frontImage'][0]['originalname'];
+    backUrl = config.url + '/images/' + req.files['backImage'][0]['originalname']
 
     let formData = new FormData();
     formData.append('front', frontUrl);

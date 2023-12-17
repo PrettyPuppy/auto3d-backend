@@ -33,7 +33,7 @@ const uploadKaedimModel = catchAsync(async (req, res) => {
     console.log('>>> Upload model');
     await Project.findByIdAndUpdate(req.params.projectID, { 
         kaedim_status: true,
-        fbxUrl: config.url + '/' + req.files['model'][0]['originalname']
+        fbxUrl: config.url + '/models/' + req.files['model'][0]['originalname']
     });
     res.status(200).send(await Project.find());
 })
@@ -42,7 +42,7 @@ const uploadProjectionModel = catchAsync(async (req, res) => {
     console.log('>>> Upload model');
     await Project.findByIdAndUpdate(req.params.projectID, { 
         projection_status: true,
-        fbxUrl: config.url + '/' + req.files['model'][0]['originalname']
+        fbxUrl: config.url + '/models/' + req.files['model'][0]['originalname']
     });
     res.status(200).send(await Project.find());
 })
@@ -51,7 +51,7 @@ const uploadGltf = catchAsync(async (req, res) => {
     console.log('>>> Upload GLTF');
     await Project.findByIdAndUpdate(req.params.projectID, {
         is_project: true,
-        fbxUrl: config.url + '/' + req.files['model'][0]['originalname']
+        fbxUrl: config.url + '/models/' + req.files['model'][0]['originalname']
     });
     res.status(200).send(await Project.findById(req.params.projectID));
 })

@@ -12,7 +12,7 @@ router.get('/getone/:projectID', projectController.getProjectById);
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "static/"); // This is where the uploaded files will be stored
+        cb(null, "public/models/"); // This is where the uploaded files will be stored
     },
     filename: function (req, file, cb) {
         // You can define how the file should be named here (e.g., use a timestamp)
