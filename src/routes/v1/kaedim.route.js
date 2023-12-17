@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-router.post('/enhance', upload.fields([{ name: "frontImage" } , { name: "backImage" }]), kaedimController.enhanceImage);
+router.post('/enhance/:user_id', upload.fields([{ name: "frontImage" } , { name: "backImage" }]), kaedimController.enhanceImage);
 
 router.post('/webhook', kaedimController.webHook);
 

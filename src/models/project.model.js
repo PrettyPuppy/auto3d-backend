@@ -4,8 +4,8 @@ const { roles } = require('../config/roles');
 
 const projectSchema = mongoose.Schema(
     {
-        devId: {
-            type: String,
+        user_id: {
+            type: String
         },
         frontImage: {
             type: String,
@@ -15,12 +15,6 @@ const projectSchema = mongoose.Schema(
         },
         fbxUrl: {
             type: String,
-        },
-        enhancedFUrl: {
-            type: String,
-        },
-        enhancedBUrl: {
-            type: String
         },
         kaedim_status: {
             type: Boolean,
@@ -36,6 +30,18 @@ const projectSchema = mongoose.Schema(
         },
         score: {
             type: Number
+        },
+        kaedim_is_accepted: {
+            type: Boolean,
+            default: false,
+        },
+        projection_is_accepted: {
+            type: Boolean,
+            default: false,
+        },
+        is_project: {
+            type: Boolean,
+            default: false,
         }
     },
     {
