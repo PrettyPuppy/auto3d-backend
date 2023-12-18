@@ -30,36 +30,26 @@ const enhanceImage = catchAsync(async (req, res) => {
         data: formData
     };
 
-    // axios.request(request)
-    //     .then((response) => {
-    //         res.status(200).send(JSON.stringify({
-    //             front: config.enhance + '/' + response.data[0],
-    //             back: config.enhance + '/' + response.data[1]
-    //         }));
-    //     })
-    //     .catch((error) => {
-    //         console.log(error);
-    //     });
-
-    // res.status(200).send(JSON.stringify({
-    //     front: 'https://5459-188-43-253-76.ngrok-free.app/123.png',
-    //     back: 'https://5459-188-43-253-76.ngrok-free.app/123.png'
-    // }))
-
-    const newProject = new Project({
-        user_id: req.params.user_id,
-        fbxUrl: null,
-        frontImage: 'https://7744-188-43-253-76.ngrok-free.app/123.png',
-        backImage: 'https://7744-188-43-253-76.ngrok-free.app/123.png',
-        kaedim_status: false,
-        projection_status: false,
-        kaedim_modeller: null,
-        projection_modeller: null,
-        score: 0
-    });
-    await newProject.save();
-    res.status(200).send(newProject);
-
+    axios.request(request)
+        .then(async (response) => {
+            const newProject = new Project({
+                user_id: req.params.user_id,
+                fbxUrl: null,
+                frontImage: config.enhance + response[0],
+                backImage: config.enhance + response[1],
+                kaedim_status: false,
+                projection_status: false,
+                kaedim_modeller: null,
+                projection_modeller: null,
+                score: 0
+            });
+            await newProject.save();
+            res.status(200).send(newProject);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        });
 })
 
 const registerHook = catchAsync(async (req, res) => {
@@ -71,7 +61,7 @@ const registerHook = catchAsync(async (req, res) => {
     }
     const body = {
         'devID': config.kaedim.dev_id,
-        'destination': config.kaedim.destination
+        'destination': config.url + '/v1/kaedim/webhook'
     }
 
     try {
@@ -104,38 +94,28 @@ const process = catchAsync(async (req, res) => {
     data.append('height', '200');
     data.append('test', 'false');
 
-    // let request = {
-    //     method: 'post',
-    //     maxBodyLength: Infinity,
-    //     url: 'https://api.kaedim3d.com/api/v1/process',
-    //     headers: {
-    //         'x-api-key': config.kaedim.api_key,
-    //         'Authorization': req.body.jwt,
-    //         'Content-Type': 'multipart/form-data',
-    //         ...data.getHeaders()
-    //     },
-    //     data: data
-    // };
+    let request = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://api.kaedim3d.com/api/v1/process',
+        headers: {
+            'x-api-key': config.kaedim.api_key,
+            'Authorization': req.body.jwt,
+            'Content-Type': 'multipart/form-data',
+            ...data.getHeaders()
+        },
+        data: data
+    };
 
-    // axios.request(request)
-    //     .then(async (response) => {
-    //         console.log(response.data);
-    //         res.status(200).send(response.data);
-    //     })
-    //     .catch((error) => {
-    //         console.log(error);
-    //         res.status(404).send(error);
-    //     });
-
-    res.status(200).send(
-        {
-            status: 'success',
-            devID: 'cbb22d7b-4ddb-4b2f-b47e-c847d9b45e37',
-            requestID: '07b38659-52da-48e0-a5a2-ebaa756914e7',
-            message: 'Request sent succesffuly, please check your webhook in 10-15 mins'
-        }
-    )
-
+    axios.request(request)
+        .then(async (response) => {
+            console.log(response.data);
+            res.status(200).send(response.data);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send(error);
+        });
 });
 
 const fetchRequest = catchAsync(async (req, res) => {
@@ -158,25 +138,23 @@ const fetchRequest = catchAsync(async (req, res) => {
         data: data
     };
 
-    // axios.request(request)
-    //     .then(async (response) => {
+    axios.request(request)
+        .then(async (response) => {
+            console.log(response.data);
 
-    //         const project = await Project.findById(req.body.user_id);
-    //         console.log(project);
-
-    //         console.log(response.data);
-    //         res.status(200).send(response.data);
-    //     })
-    //     .catch((error) => {
-    //         console.log('>>> Error in fetchRequest');
-    //     });
-
-
-        await Project.findByIdAndUpdate( req.body.id, {
-            fbxUrl: 'https://7744-188-43-253-76.ngrok-free.app/cone.fbx',
-            // fbxUrl: res.data.asset.interations[0].results.fbx,
+            if (response.data.asset.iterations[0].results.fbx) {
+                await Project.findByIdAndUpdate(req.body.id, {
+                    fbxUrl: response.data.asset.iterations[0].results.fbx
+                });
+                res.status(200).send(await Project.findById(req.body.id));
+            } else {
+                res.status(404).send(response.data);
+            }
+        })
+        .catch((error) => {
+            console.log('>>> Error in fetchRequest');
+            res.status(500).send(error);
         });
-        res.status(200).send(await Project.findById(req.body.id));
 });
 
 const fetchAll = catchAsync(async (req, res) => {

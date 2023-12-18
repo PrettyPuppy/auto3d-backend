@@ -28,7 +28,6 @@ const envVarsSchema = Joi.object()
     ENHANCE_IMAGE: Joi.string(),
     KAEDIM_API_KEY: Joi.string(),
     KAEDIM_DEV_ID: Joi.string(),
-    KAEDIM_DESTINATION: Joi.string(),
     KAEDIM_REFRESH_TOKEN: Joi.string(),
     KAEDIM_SECRET: Joi.string(),
   })
@@ -75,7 +74,6 @@ module.exports = {
   kaedim: {
     api_key: envVars.KAEDIM_API_KEY,
     dev_id: envVars.KAEDIM_DEV_ID,
-    destination: envVars.KAEDIM_DESTINATION,
     secret: envVars.KAEDIM_SECRET,
     refresh_token: envVars.KAEDIM_REFRESH_TOKEN
   },

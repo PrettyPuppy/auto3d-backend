@@ -42,6 +42,10 @@ const projectSchema = mongoose.Schema(
         is_project: {
             type: Boolean,
             default: false,
+        },
+        is_publish: {
+            type: Boolean,
+            default: false
         }
     },
     {

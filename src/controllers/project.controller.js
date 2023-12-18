@@ -56,11 +56,25 @@ const uploadGltf = catchAsync(async (req, res) => {
     res.status(200).send(await Project.findById(req.params.projectID));
 })
 
+const updateScore = catchAsync(async (req, res) => {
+    console.log('>>> Update Score');
+    await Project.findByIdAndUpdate(req.params.projectID, req.body);
+    res.status(200).send(await Project.find());
+})
+
+const handlePublish = catchAsync(async (req, res) => {
+    console.log('>>> Handle Submit');
+    await Project.findByIdAndUpdate(req.params.projectID, req.body);
+    res.status(200).send(await Project.find());
+})
+
 module.exports = {
     getAllProjects,
     updateProjectById,
     getProjectById,
     uploadKaedimModel,
     uploadProjectionModel,
-    uploadGltf
+    uploadGltf,
+    updateScore,
+    handlePublish
 };

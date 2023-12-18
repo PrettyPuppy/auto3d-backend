@@ -9,6 +9,8 @@ const router = express.Router();
 router.get('/getall', projectController.getAllProjects);
 router.post('/update/:projectID', projectController.updateProjectById);
 router.get('/getone/:projectID', projectController.getProjectById);
+router.put('/updateScore/:projectID', projectController.updateScore);
+router.put('/publish/:projectID', projectController.handlePublish);
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
